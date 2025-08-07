@@ -2,15 +2,15 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 import pandas as pd
 from io import StringIO
 
-from preprocessing import preprocess_log_data
-from model import predict_ip_risk
-from location import get_ip_location  # Import the geolocation function
+from app.preprocessing import preprocess_log_data
+from app.model import predict_ip_risk
+from app.location import get_ip_location
 
 router = APIRouter()
 
 @router.post("/upload")
 async def upload_logs(file: UploadFile = File(...)):
-    # Check file extension
+    # Checking file extension
     if not file.filename.endswith('.csv'):
         raise HTTPException(status_code=400, detail="Only CSV files are acceptable")
 

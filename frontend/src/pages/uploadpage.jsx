@@ -41,7 +41,7 @@ function UploadPage() {
         Your browser does not support the video tag.
       </video>
 
-      {/* Optional dark overlay for better readability */}
+      {/* dark overlay for better readability */}
       <div className="background-overlay"></div>
 
       {/* Right-aligned floating content */}

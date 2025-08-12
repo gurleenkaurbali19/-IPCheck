@@ -1,60 +1,58 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import '../styles/uploadpage.css';
 
 function UploadPage() {
   const [file, setFile] = useState(null);
-  const [results, setResults] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const handleFileChange = (e) => setFile(e.target.files[0]);
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file) {
+      alert('Please select a CSV file first.');
+      return;
+    }
 
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('file', file);
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      // Save the response in state
-      setResults(response.data.results);
-    } catch (error) {
-      console.error("Upload failed:", error);
+      navigate('/map', { state: { results: response.data.results } });
+    } catch (err) {
+      alert('Upload failed, please try again.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>Upload CSV</h2>
-      <input type="file" accept=".csv" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
+    <div className="upload-page">
+      {/* Fullscreen background video */}
+      <video autoPlay loop muted playsInline className="background-video">
+        <source src="/background-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      {results && (
-        <div>
-          <h3>Results:</h3>
-          <ul>
-            {results.map((item, index) => (
-                <li key={index}>
-                <p><strong>IP:</strong> {item.ip}</p>
-                <p><strong>Prediction:</strong> {item.Prediction}</p>
-                <p><strong>Suspicion Score:</strong> {item.Suspicion_Score}</p>
-                <p><strong>Latitude:</strong> {item.latitude}</p>
-                <p><strong>Longitude:</strong> {item.longitude}</p>
-                <p><strong>Location:</strong> {item.location}</p>
-            <hr />
-  </li>
-))}
+      {/* Optional dark overlay for better readability */}
+      <div className="background-overlay"></div>
 
-
-          </ul>
-        </div>
-      )}
+      {/* Right-aligned floating content */}
+      <div className="content-right">
+        <h1>IPCheck - Detect Suspicious IPs</h1>
+        <p>Upload your server log CSV file to identify suspicious IP addresses with AI detection.</p>
+        <input type="file" accept=".csv" onChange={handleFileChange} disabled={isLoading} />
+        <button onClick={handleUpload} disabled={isLoading}>
+          {isLoading ? 'Uploading...' : 'Upload'}
+        </button>
+      </div>
     </div>
   );
 }

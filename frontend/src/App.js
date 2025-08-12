@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import UploadPage from './pages/uploadpage';
-import MapPage from './pages/MapPage';
-
+import UploadPage from './pages/uploadpage.jsx';
+import MapPage from './pages/MapPage.jsx';
 
 function App() {
   return (

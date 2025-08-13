@@ -41,21 +41,41 @@ async def upload_logs(file: UploadFile = File(...)):
 
     # Add latitude, longitude, location for each IP by calling get_ip_location()
     enriched_results = []
+    missing = []
+
+    # First pass
     for row in response_data.itertuples(index=False):
         ip = row.IP_Address
         pred = row.Prediction
         score = row.Suspicion_Score
-        
-        # Get geolocation data
+    
         loc_data = get_ip_location(ip)
-
-        enriched_results.append({
+        data = {
             "ip": ip,
             "Prediction": pred,
             "Suspicion_Score": score,
             "latitude": loc_data.get("latitude"),
             "longitude": loc_data.get("longitude"),
             "location": loc_data.get("location")
-        })
+        }
+        # Only keep IPs w/ valid location
+        if data["latitude"] is not None and data["longitude"] is not None:
+            enriched_results.append(data)
+        else:
+            missing.append((ip, pred, score))
 
+    # Second pass (retry failed lookups)
+    for (ip, pred, score) in missing:
+        loc_data = get_ip_location(ip)
+        data = {
+            "ip": ip,
+            "Prediction": pred,
+            "Suspicion_Score": score,
+            "latitude": loc_data.get("latitude"),
+            "longitude": loc_data.get("longitude"),
+            "location": loc_data.get("location")
+        }
+        if data["latitude"] is not None and data["longitude"] is not None:
+            enriched_results.append(data)
+    # Return only entries with valid coordinates
     return {"results": enriched_results}

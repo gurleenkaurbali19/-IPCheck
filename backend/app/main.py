@@ -14,3 +14,6 @@ app.add_middleware(
 )
 
 app.include_router(router)
+
+
+#uvicorn app.main:app --reload

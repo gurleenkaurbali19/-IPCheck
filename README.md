@@ -20,8 +20,8 @@ It allows users to upload a server log in CSV format and get an **AI-powered ana
         <br/>Map Page
       </td>
       <td align="center">
-        <img width="1919" height="866" alt="image" src="https://github.com/user-attachments/assets/1e40c701-5f28-45f5-be9f-996f38bf7e3b" 
- alt="Info Page" width="300"/>
+        <img width="1906" height="895" alt="image" src="https://github.com/user-attachments/assets/21c681e0-fcb1-4b82-8bf0-6e6a1072025f" 
+alt="Info Page" width="300"/>
         <br/>Info Page
       </td>
     </tr>

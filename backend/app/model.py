@@ -2,7 +2,10 @@ import pandas as pd
 import joblib
 import os
 
-model = joblib.load(r"D:\IPCheck\Model\random_forest_model.joblib") 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # goes up to IPCheck/
+MODEL_PATH = os.path.join(BASE_DIR, "Model", "random_forest_model.joblib")
+
+model = joblib.load(MODEL_PATH)
 
 MODEL_FEATURES = [
     "DELETE_Perc",

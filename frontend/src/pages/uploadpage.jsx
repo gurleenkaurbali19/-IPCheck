@@ -22,9 +22,11 @@ function UploadPage() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await axios.post(
+  'https://ipcheck-backend-hzdr.onrender.com/upload',
+  formData,
+  { headers: { 'Content-Type': 'multipart/form-data' } }
+);
 
       // stop loader & navigate
       setLoading(false);
